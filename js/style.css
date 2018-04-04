@@ -1,0 +1,73 @@
+#map {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+html, body {
+	overflow: hidden;
+	touch-action: none;
+	position: absolute;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	background: #000;
+}
+
+iframe {
+	cursor: auto; important!;
+	position: absolute;
+	border: none;
+	top:0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.hero.is-info {
+	background: transparent;
+  	position: absolute;
+	border: none;
+	top:0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+.hero .nav, .hero.is-success .nav {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.hero .subtitle {
+  padding: 3rem 0;
+  line-height: 1.5;
+}
+
+.ctos_title {
+	background: rgba(0,0,0,0.5);
+	padding: 5px;
+	width: 200px;
+	height: 50px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 15px;
+}
+
+.ctos_title img {
+	width: 100%;
+	height: 100%;
+}
+
+.t {
+	background: rgba(0,0,0,0.5);
+	padding: 15px; !important;
+}
+
+.box {
+	background: transparent;
+}
+
+.help {
+	max-height: 92px;
+	min-height: 92px;
+}
