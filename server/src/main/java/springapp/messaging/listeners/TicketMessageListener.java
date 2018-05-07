@@ -1,14 +1,9 @@
 package springapp.messaging.listeners;
 
+import ctos.iot.messaging.templates.StructuredMessage;
 import org.springframework.jms.core.JmsTemplate;
-import springapp.messaging.templates.Ticket;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.Queue;
-import javax.jms.TextMessage;
-import java.util.Map;
+import javax.jms.*;
 
 public class TicketMessageListener implements MessageListener {
     private JmsTemplate jmsTemplate;
@@ -30,11 +25,15 @@ public class TicketMessageListener implements MessageListener {
             } catch (JMSException ex) {
                 throw new RuntimeException(ex);
             }
-        }
-    }
+        } else if (message instanceof ObjectMessage) {
+            ObjectMessage objectMessage = (ObjectMessage) message;
+            try {
+                StructuredMessage structuredMessage = (StructuredMessage) objectMessage.getObject();
+                System.out.println(structuredMessage.toString());
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
 
-    public Ticket receiveMessage() throws JMSException {
-        Map map = (Map) this.jmsTemplate.receiveAndConvert();
-        return new Ticket((String) map.get("topic"), (String) map.get("description"));
+        }
     }
 }

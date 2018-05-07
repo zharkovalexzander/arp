@@ -3,20 +3,15 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:context="http://www.springframework.org/schema/context"
-             xmlns:tx="http://www.springframework.org/schema/tx"
-             xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+             xmlns:aop="http://www.springframework.org/schema/aop"
              xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/tx
-         http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <beans:bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
         <beans:constructor-arg index="0" value="tcp://localhost:61618" />
-        <beans:property name="trustAllPackages" value="true" />
     </beans:bean>
 
     <beans:bean id="connectionFactory"
@@ -33,23 +28,22 @@
         <beans:property name="defaultDestination" ref="destinationQueue" />
     </beans:bean>
 
-    <beans:bean id="messageListener" class="springapp.messaging.listeners.TicketMessageListener">
-        <beans:property name="jmsTemplate" ref="jmsTemplate" />
+    <beans:bean id="jmsMessageSender" class="ctos.iot.messaging.senders.JmsMessageSender">
         <beans:property name="queue" ref="destinationQueue" />
+        <beans:property name="jmsTemplate" ref="jmsTemplate" />
     </beans:bean>
 
     <beans:bean id="jmsContainer"
           class="org.springframework.jms.listener.DefaultMessageListenerContainer">
         <beans:property name="connectionFactory" ref="connectionFactory" />
         <beans:property name="destinationName" value="IN_QUEUE" />
-        <beans:property name="messageListener" ref="messageListener" />
+        <beans:property name="autoStartup" value="false"/>
     </beans:bean>
 
-    <context:component-scan base-package="springapp" />
+    <context:component-scan base-package="ctos.iot.messaging" />
 
     <aop:aspectj-autoproxy />
 
     <context:annotation-config/>
-    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
 </beans:beans>

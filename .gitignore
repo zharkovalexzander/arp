@@ -2,3 +2,10 @@
 js/.idea
 server/.idea
 server/SpringBootMvcSecurityAndHibernate.iml
+*.iml
+
+iot/.idea
+.idea
+
+*.iml
+iot/iot.iml

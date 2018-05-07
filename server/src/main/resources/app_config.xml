@@ -16,6 +16,7 @@
 
     <beans:bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
         <beans:constructor-arg index="0" value="tcp://localhost:61618" />
+        <beans:property name="trustAllPackages" value="true" />
     </beans:bean>
 
     <beans:bean id="connectionFactory"
@@ -27,18 +28,9 @@
         <beans:constructor-arg index="0" value="IN_QUEUE" />
     </beans:bean>
 
-    <beans:bean id="customMessageConverter" class="springapp.messaging.convertors.JmsMessageConverter" />
-
     <beans:bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
         <beans:property name="connectionFactory" ref="connectionFactory" />
         <beans:property name="defaultDestination" ref="destinationQueue" />
-        <beans:property name="messageConverter" ref="customMessageConverter" />
-    </beans:bean>
-
-    <beans:bean id="messageSender" class="springapp.messaging.senders.JmsMessageSender">
-        <beans:property name="queue" ref="destinationQueue" />
-        <beans:property name="jmsTemplate" ref="jmsTemplate" />
-        <beans:property name="messageConverter" ref="customMessageConverter" />
     </beans:bean>
 
     <beans:bean id="messageListener" class="springapp.messaging.listeners.TicketMessageListener">
@@ -57,7 +49,7 @@
 
     <aop:aspectj-autoproxy />
 
-    <context:annotation-config></context:annotation-config>
+    <context:annotation-config/>
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
 </beans:beans>

@@ -29,21 +29,55 @@ function main() {
     });
 
     let points = freeBus.features[0].geometry.coordinates;
+    let grades = ['#234', 'Price: 3.40$', 'Capacity: 40 seats', 'Available: 0 seats'];
 
-    let lng = points[0][0];
-    let lat = points[0][1];
-    let i = 1;
-    var marker = L.marker([lng, lat].reverse(), {icon: myIcon}).addTo(map);
-    setInterval(function () {
-        marker.setLatLng(points[i].reverse());
-        if(i == points.length - 1) {
-            i = 1;
-        } else {
-            i++;
+    var legend = L.control({position: 'topright'});
+
+    legend.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'info legend');
+
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML += "" + grades[i] + '<br>';
         }
-    }, 250);
+
+        return div;
+    };
+
+    legend.addTo(map);
+
+    let i = 0;
+    var marker = L.marker(points[i].reverse(), {icon: myIcon}).addTo(map);
+    setInterval(function () {
+        grades[3] = 'Available: ' + randomInteger(0, 40) + ' seats';
+        marker.setLatLng(points[i++ % points.length].reverse());
+        legend.remove();
+
+        legend = L.control({position: 'topright'});
+
+        legend.onAdd = function (map) {
+
+            var div = L.DomUtil.create('div', 'info legend');
+
+            // loop through our density intervals and generate a label with a colored square for each interval
+            for (var i = 0; i < grades.length; i++) {
+                div.innerHTML += "" + grades[i] + '<br>';
+            }
+
+            return div;
+        };
+
+        legend.addTo(map);
 
 
+    }, 650);
+}
+
+function randomInteger(min, max) {
+    let rand = min - 0.5 + Math.random() * (max - min + 1)
+    rand = Math.round(rand);
+    return rand;
 }
 
 window.onload = main;

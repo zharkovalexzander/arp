@@ -1,4 +1,4 @@
-package springapp;
+package ctos.iot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,8 +8,8 @@ import org.springframework.jms.annotation.EnableJms;
 @SpringBootApplication
 @EnableJms
 @ImportResource({ "classpath:app_config.xml" })
-public class Application {
+public class StartIOT {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(StartIOT.class, args);
     }
 }
