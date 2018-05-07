@@ -4,18 +4,18 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "route", schema = "ctos")
+@Table(name = "route", schema = "ctos", catalog = "")
 public class RouteEntity {
-    private Integer id;
+    private Long id;
     private String coordsList;
 
     @Id
     @Column(name = "id")
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

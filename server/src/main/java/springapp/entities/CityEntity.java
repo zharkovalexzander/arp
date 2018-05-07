@@ -4,17 +4,16 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
-@NamedQueries(value = {
-        @NamedQuery(name = CityEntity.QUERY_GET_CITY_BY_NAME,
-                query = "select c from CityEntity c where c.name = :name")
-})
-
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "QUERY_GET_CITY_BY_NAME",
+                query = "from CityEntity where name := name")
+})
 @Table(name = "city", schema = "ctos")
-public class CityEntity extends BasicEntity implements Serializable {
-    public static final String QUERY_GET_CITY_BY_NAME = "CityEntity.getCityByName";
+public class CityEntity implements Serializable {
+    public static final String QUERY_GET_CITY_BY_NAME = "QUERY_GET_CITY_BY_NAME";
 
-    private Integer id;
+    private Long id;
     private String name;
     private String country;
     private String info;
@@ -22,11 +21,11 @@ public class CityEntity extends BasicEntity implements Serializable {
 
     @Id
     @Column(name = "id")
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -86,10 +85,5 @@ public class CityEntity extends BasicEntity implements Serializable {
     public int hashCode() {
 
         return Objects.hash(id, name, country, info, coords);
-    }
-
-    @Override
-    public String entityName() {
-        return "CityEntity";
     }
 }

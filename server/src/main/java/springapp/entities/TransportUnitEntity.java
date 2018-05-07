@@ -4,9 +4,11 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "transport_unit", schema = "ctos")
+@Table(name = "transport_unit", schema = "ctos", catalog = "")
+@IdClass(TransportUnitEntityPK.class)
 public class TransportUnitEntity {
-    private Integer id;
+    private Long cityId;
+    private Long routeId;
     private String transportNumber;
     private String type;
     private Double price;
@@ -14,13 +16,23 @@ public class TransportUnitEntity {
     private Integer capacity;
 
     @Id
-    @Column(name = "id")
-    public Integer getId() {
-        return id;
+    @Column(name = "city_id")
+    public Long getCityId() {
+        return cityId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
+    }
+
+    @Id
+    @Column(name = "route_id")
+    public Long getRouteId() {
+        return routeId;
+    }
+
+    public void setRouteId(Long routeId) {
+        this.routeId = routeId;
     }
 
     @Basic
@@ -78,7 +90,8 @@ public class TransportUnitEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TransportUnitEntity that = (TransportUnitEntity) o;
-        return Objects.equals(id, that.id) &&
+        return Objects.equals(cityId, that.cityId) &&
+                Objects.equals(routeId, that.routeId) &&
                 Objects.equals(transportNumber, that.transportNumber) &&
                 Objects.equals(type, that.type) &&
                 Objects.equals(price, that.price) &&
@@ -89,6 +102,6 @@ public class TransportUnitEntity {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, transportNumber, type, price, seats, capacity);
+        return Objects.hash(cityId, routeId, transportNumber, type, price, seats, capacity);
     }
 }
