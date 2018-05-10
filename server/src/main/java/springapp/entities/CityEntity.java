@@ -4,14 +4,18 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+import static springapp.entities.CityEntity.QUERY_GET_CITY_BY_NAME;
+
 @Entity
-@NamedQueries({
-        @NamedQuery(name = "QUERY_GET_CITY_BY_NAME",
-                query = "from CityEntity where name := name")
-})
 @Table(name = "city", schema = "ctos")
+@NamedQueries({
+        @NamedQuery(name = QUERY_GET_CITY_BY_NAME,
+                query = "select ce from CityEntity ce where ce.name = :name")
+})
 public class CityEntity implements Serializable {
     public static final String QUERY_GET_CITY_BY_NAME = "QUERY_GET_CITY_BY_NAME";
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     private String name;

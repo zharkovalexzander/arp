@@ -6,13 +6,23 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 public class StructuredMessage implements Serializable {
+    private String id;
     private LinkedList<SystemMessage> messages;
 
     public StructuredMessage() {
         messages = new LinkedList<>();
     }
 
-    public StructuredMessage(LinkedList<SystemMessage> messages) {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public StructuredMessage(String id, LinkedList<SystemMessage> messages) {
+        this.id = id;
         this.messages = messages;
     }
 
@@ -26,6 +36,6 @@ public class StructuredMessage implements Serializable {
 
     @Override
     public String toString() {
-        return messages.toString();
+        return "{id:\"" + id + "\", messages:\"" + messages.toString() + "\"}";
     }
 }

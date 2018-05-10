@@ -1,18 +1,31 @@
 package ctos.iot.structure;
 
-import ctos.iot.messaging.templates.SystemMessage;
-
 import java.io.Serializable;
 import java.util.UUID;
 
 public abstract class GenericModule implements Module, Serializable {
-    protected String ID;
-    protected String type;
+    protected String id;
+    transient protected ModuleRouter receiver;
+    transient protected int port;
 
     public GenericModule() {
-        ID = UUID.randomUUID().toString();
+        id = UUID.randomUUID().toString();
+        receiver = null;
     }
 
     @Override
-    public abstract SystemMessage sendPingMessage();
+    public void sendPingMessage(int port, ModuleRouter to) {
+        if (this.receiver == null) {
+            this.receiver = to;
+        }
+        if (this.port == 0) {
+            this.port = port;
+        }
+    }
+
+    @Override
+    public abstract String moduleName();
+
+    @Override
+    public abstract void sendData();
 }

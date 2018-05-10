@@ -36,7 +36,7 @@ public class BaseDao<T extends Serializable> {
     }
 
     public List<T> findByIds(List<Integer> ids) {
-        String query = "select from e " + clazz.getName() + " e where id :ids";
+        String query = "select e from " + clazz.getName() + " e where e.id =: ids";
 
         return entityManager.createQuery(query, clazz)
                 .setParameter("ids", ids)

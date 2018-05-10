@@ -1,4 +1,4 @@
-package ctos.iot;
+package springapp.entities;
 
 import java.io.Serializable;
 

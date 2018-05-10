@@ -16,17 +16,25 @@ public class MessagingModule extends GenericModule {
 
     public MessagingModule() {
         super();
-        this.type = this.getClass().getName();
     }
 
     @Override
-    public SystemMessage sendPingMessage() {
+    public void sendPingMessage(int port, ModuleRouter to) {
+        super.sendPingMessage(port, to);
         SystemMessage<LinkedList> message = new SystemMessage<>(true);
-        message.setDeviceType(this.type);
-        message.setDeviceId(this.ID);
+        message.setDeviceType(moduleName());
+        message.setDeviceId(this.id);
         message.setData(new LinkedList());
-        return message;
+        to.receiveMessage(port, message);
     }
+
+    @Override
+    public String moduleName() {
+        return "msg";
+    }
+
+    @Override
+    public void sendData() { }
 
     public void sendMessage(StructuredMessage structuredMessage) {
         jmsMessageSender.sendMessage(structuredMessage);

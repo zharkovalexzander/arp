@@ -1,6 +1,5 @@
 package ctos.iot.messaging.templates;
 
-import javax.jms.ObjectMessage;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +36,10 @@ public class SystemMessage<T extends Serializable> implements Serializable {
 
     public T getData() {
         return data;
+    }
+
+    public boolean isTest() {
+        return isTest;
     }
 
     @Override

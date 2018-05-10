@@ -1,4 +1,7 @@
 function main() {
+
+    var myPos = [-96.80060824183424, 32.780095050808356];
+    var busStop = [-96.80288368185352, 32.77899485490894];
         
     var map = L.map('map').setView([-96.80508818973559, 32.778226121521236].reverse(), 17);
 
@@ -6,6 +9,35 @@ function main() {
         maxZoom: 17,
         id: 'mapbox.streets'
     }).addTo(map);
+
+    var firstpolyline = new L.Polyline([myPos.reverse(), busStop.reverse()], {
+        color: 'yellow',
+        weight: 3,
+        opacity: 1,
+        smoothFactor: 1
+    });
+
+    firstpolyline.addTo(map);
+
+    var myIcon = L.icon({
+        iconUrl: 'http://www.icons101.com/icon_ico/id_67360/SchoolBus.ico',
+        iconSize: [40, 40]
+    });
+
+    var myIcon1 = L.icon({
+        iconUrl: 'https://www.freeiconspng.com/uploads/red-location-icon-1.png',
+        iconSize: [25, 40],
+        iconAnchor: [10, 40],
+    });
+
+    var myIcon2 = L.icon({
+        iconUrl: 'http://files.softicons.com/download/social-media-icons/free-social-media-icons-by-aha-soft/png/512x512/User.png',
+        iconSize: [40, 40]
+    });
+
+    var marker2 = L.marker(myPos, {icon: myIcon2}).addTo(map);
+
+    var marker1 = L.marker(busStop, {icon: myIcon1}).addTo(map);
 
 
     L.geoJSON(freeBus, {
@@ -29,7 +61,7 @@ function main() {
     });
 
     let points = freeBus.features[0].geometry.coordinates;
-    let grades = ['#234', 'Price: 3.40$', 'Capacity: 40 seats', 'Available: 0 seats'];
+    let grades = ['#234', 'Price: 3.40$', 'Available: 40 seats', 'Occupied: 0 seats'];
 
     var legend = L.control({position: 'topright'});
 
@@ -37,7 +69,6 @@ function main() {
 
         var div = L.DomUtil.create('div', 'info legend');
 
-        // loop through our density intervals and generate a label with a colored square for each interval
         for (var i = 0; i < grades.length; i++) {
             div.innerHTML += "" + grades[i] + '<br>';
         }
@@ -48,36 +79,37 @@ function main() {
     legend.addTo(map);
 
     let i = 0;
-    var marker = L.marker(points[i].reverse(), {icon: myIcon}).addTo(map);
+    var marker = L.marker([0, 0], {icon: myIcon}).addTo(map);
     setInterval(function () {
-        grades[3] = 'Available: ' + randomInteger(0, 40) + ' seats';
-        marker.setLatLng(points[i++ % points.length].reverse());
-        legend.remove();
+        fetch("https://localhost:8443/get/1/gps").then(obj => obj.json()).then(obj => {
+            fetch("https://localhost:8443/pass/1").then(pass => pass.json()).then(pass => {
+                if (pass.value != null) {
+                    grades[3] = 'Occupied: ' + pass.value + ' seats';
+                }
 
-        legend = L.control({position: 'topright'});
+                if (obj.value != null) {
+                    marker.setLatLng([obj.value, obj.key]);
+                }
 
-        legend.onAdd = function (map) {
+                legend.remove();
 
-            var div = L.DomUtil.create('div', 'info legend');
+                legend = L.control({position: 'topright'});
 
-            // loop through our density intervals and generate a label with a colored square for each interval
-            for (var i = 0; i < grades.length; i++) {
-                div.innerHTML += "" + grades[i] + '<br>';
-            }
+                legend.onAdd = function (map) {
 
-            return div;
-        };
+                    var div = L.DomUtil.create('div', 'info legend');
 
-        legend.addTo(map);
+                    for (var i = 0; i < grades.length; i++) {
+                        div.innerHTML += "" + grades[i] + '<br>';
+                    }
 
+                    return div;
+                };
 
-    }, 650);
-}
-
-function randomInteger(min, max) {
-    let rand = min - 0.5 + Math.random() * (max - min + 1)
-    rand = Math.round(rand);
-    return rand;
+                legend.addTo(map);
+            });
+        });
+    }, 1000);
 }
 
 window.onload = main;
